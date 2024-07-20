@@ -21,13 +21,23 @@
 #include "gif_files\star_trek_hud.h"         //GIF size in FLASH memory is 1.6MB
 #include "gif_files\jedi_battle.h"           //GIF size in FLASH memory is 3.3MB (use partitions.csv for this one, if you your ESP32 board has 4MB Flash size)
 
-BB_SPI_LCD tft; // Main object for the display driver
+// Push Button
+#define PUSH_BUTTION_PIN 1
+unsigned long lastDebounceTime;
+int lastState = -1;
+int state = -1;
+
+// Main object for the display driver
+BB_SPI_LCD tft;
 
 // GIF to display
 #define GifData x_wing // Change image to display (image name in gif_files\[image header file].h)
 
 void setup()
 {
+  pinMode(PUSH_BUTTION_PIN, INPUT_PULLUP);
+  lastDebounceTime = millis();
+
   Serial.begin(115200);
   tft.begin(LCD_ILI9341, FLAGS_NONE, 40000000, 8, 3, 9, -1, -1, 17, 18); //
   tft.setRotation(LCD_ORIENTATION_270);                                  // Make sure you have the right orientation based on your GIF
@@ -47,7 +57,6 @@ void setup()
       //  no need to continue
     }
   }
-
   while (true)
   {
     gif->playFrame(false, NULL);
@@ -56,7 +65,6 @@ void setup()
 
 void loop()
 {
-  Serial.println("test");
   delay(1);
 }
 
@@ -90,6 +98,28 @@ AnimatedGIF *openGif(uint8_t *gifdata, size_t gifsize)
     printGifErrorMessage(gif->getLastError());
     return NULL;
   }
+}
+
+bool ButtonPressed()
+{
+  int currentState = digitalRead(PUSH_BUTTION_PIN);
+  if (currentState != lastState)
+  {
+    lastDebounceTime = millis();
+  }
+
+  if ((millis() - lastDebounceTime) > 1)
+  {
+    if (currentState != state)
+    {
+      state = currentState;
+      lastState = currentState;
+      return state == LOW; // Returns true if the button is pressed
+    }
+  }
+
+  lastState = currentState;
+  return false; // No change in state
 }
 
 //
