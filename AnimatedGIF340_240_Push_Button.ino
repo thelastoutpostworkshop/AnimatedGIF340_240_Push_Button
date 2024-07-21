@@ -67,6 +67,7 @@ void loop()
   if (ButtonPressed())
   {
     Serial.println("Button Pressed");
+    tft.fillScreen(TFT_BLACK);
     currentGifPlayed = (currentGifPlayed + 1) % 2; // Toggle between 0 and 1
   }
   gifTopPlay[currentGifPlayed]->playFrame(false, NULL);
