@@ -30,10 +30,11 @@ int state = -1;
 // Main object for the display driver
 BB_SPI_LCD tft;
 
-// GIF to display
-#define GifData1 x_wing        // Change image to display (image name in gif_files\[image header file].h)
-#define GifData2 star_trek_hud // Change image to display (image name in gif_files\[image header file].h)
-AnimatedGIF *gifTopPlay[2];
+// GIFs to display
+#define GIF_COUNT 2 // Number of GIFs to cycle through
+const uint8_t *gifData[GIF_COUNT] = {x_wing, star_trek_hud};                // Add more GIFs here if you have enough space on flash memory
+const size_t gifSizes[GIF_COUNT] = {sizeof(x_wing), sizeof(star_trek_hud)}; // Add corresponding sizes here
+AnimatedGIF *gifTopPlay[GIF_COUNT];
 int currentGifPlayed = 0;
 
 void setup()
@@ -50,14 +51,16 @@ void setup()
 
   printFlashInfo();
 
-  gifTopPlay[0] = openGif((uint8_t *)GifData1, sizeof(GifData1));
-  gifTopPlay[1] = openGif((uint8_t *)GifData2, sizeof(GifData2));
-  if (gifTopPlay[0] == NULL || gifTopPlay[1] == NULL)
+  for (int i = 0; i < GIF_COUNT; i++)
   {
-    Serial.println("Cannot open GIF");
-    while (true)
+    gifTopPlay[i] = openGif((uint8_t *)gifData[i], gifSizes[i]);
+    if (gifTopPlay[i] == NULL)
     {
-      //  no need to continue
+      Serial.println("Cannot open GIF");
+      while (true)
+      {
+        // No need to continue
+      }
     }
   }
 }
@@ -68,7 +71,7 @@ void loop()
   {
     Serial.println("Button Pressed");
     tft.fillScreen(TFT_BLACK);
-    currentGifPlayed = (currentGifPlayed + 1) % 2; // Toggle between 0 and 1
+    currentGifPlayed = (currentGifPlayed + 1) % GIF_COUNT; // Cycle through the GIFs
   }
   gifTopPlay[currentGifPlayed]->playFrame(false, NULL);
 }
