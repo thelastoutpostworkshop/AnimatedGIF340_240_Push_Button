@@ -31,9 +31,9 @@ int state = -1;
 BB_SPI_LCD tft;
 
 // GIFs to display
-#define GIF_COUNT 2 // Number of GIFs to cycle through
-const uint8_t *gifData[GIF_COUNT] = {x_wing, star_trek_hud};                // Add more GIFs here if you have enough space on flash memory
-const size_t gifSizes[GIF_COUNT] = {sizeof(x_wing), sizeof(star_trek_hud)}; // Add corresponding sizes here
+#define GIF_COUNT 2 // Number of GIFs to cycle through, if you have enough space on flash memory
+const uint8_t *gifData[GIF_COUNT] = {x_wing, hud_a};                // Add more GIFs here if you have enough space on flash memory
+const size_t gifSizes[GIF_COUNT] = {sizeof(x_wing), sizeof(hud_a)}; // Add corresponding sizes here
 AnimatedGIF *gifTopPlay[GIF_COUNT];
 int currentGifPlayed = 0;
 
@@ -69,7 +69,7 @@ void loop()
 {
   if (ButtonPressed())
   {
-    Serial.println("Button Pressed");
+    Serial.println("Button Pressed, showing the next GIF");
     tft.fillScreen(TFT_BLACK);
     currentGifPlayed = (currentGifPlayed + 1) % GIF_COUNT; // Cycle through the GIFs
   }
