@@ -31,7 +31,10 @@ int state = -1;
 BB_SPI_LCD tft;
 
 // GIF to display
-#define GifData x_wing // Change image to display (image name in gif_files\[image header file].h)
+#define GifData1 x_wing        // Change image to display (image name in gif_files\[image header file].h)
+#define GifData2 star_trek_hud // Change image to display (image name in gif_files\[image header file].h)
+AnimatedGIF *gifTopPlay[2];
+int currentGifPlayed = 0;
 
 void setup()
 {
@@ -47,9 +50,9 @@ void setup()
 
   printFlashInfo();
 
-  AnimatedGIF *gif;
-  gif = openGif((uint8_t *)GifData, sizeof(GifData));
-  if (gif == NULL)
+  gifTopPlay[0] = openGif((uint8_t *)GifData1, sizeof(GifData1));
+  gifTopPlay[1] = openGif((uint8_t *)GifData2, sizeof(GifData2));
+  if (gifTopPlay[0] == NULL || gifTopPlay[1] == NULL)
   {
     Serial.println("Cannot open GIF");
     while (true)
@@ -57,15 +60,16 @@ void setup()
       //  no need to continue
     }
   }
-  while (true)
-  {
-    gif->playFrame(false, NULL);
-  }
 }
 
 void loop()
 {
-  delay(1);
+  if (ButtonPressed())
+  {
+    Serial.println("Button Pressed");
+    currentGifPlayed = (currentGifPlayed + 1) % 2; // Toggle between 0 and 1
+  }
+  gifTopPlay[currentGifPlayed]->playFrame(false, NULL);
 }
 
 // Open Gif and allocate memory
