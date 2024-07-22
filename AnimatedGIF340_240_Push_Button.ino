@@ -2,6 +2,7 @@
 // Youtube Tutorial:
 // Tested with Espressif ESP32 Arduino Core v3.0.2
 // Using ESP32-S3 with 8MB of PSRAM
+// See also the Tutorial on how to create ESP32 custom partitions:
 //
 #include "esp_flash.h"
 #include "esp_partition.h"
