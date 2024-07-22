@@ -43,9 +43,9 @@ void setup()
   lastDebounceTime = millis();
 
   Serial.begin(115200);
-  tft.begin(LCD_ILI9341, FLAGS_NONE, 40000000, 8, 3, 9, -1, -1, 17, 18); //
-  tft.setRotation(LCD_ORIENTATION_270);                                  // Make sure you have the right orientation based on your GIF
-                                                                         // or the GIF will show incorrectly
+  tft.begin(LCD_ILI9341, FLAGS_NONE, 40000000, 8, 18, 17, -1, -1, 9, 3); //
+  tft.setRotation(LCD_ORIENTATION_90);                                   // Make sure you have the right orientation based on your GIF
+                                                                         // or the GIF will show incorrectly, even garbage output
                                                                          // Values : LCD_ORIENTATION_0, LCD_ORIENTATION_90, LCD_ORIENTATION_180 or LCD_ORIENTATION_270
   tft.fillScreen(TFT_BLACK);
 
