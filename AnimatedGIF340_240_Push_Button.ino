@@ -23,7 +23,7 @@
 #include "gif_files\jedi_battle.h"           //GIF size in FLASH memory is 3.3MB (use partitions.csv for this one, if you your ESP32 board has 4MB Flash size)
 
 // Push Button
-#define PUSH_BUTTION_PIN 1
+#define PUSH_BUTTION_PIN 13
 unsigned long lastDebounceTime;
 int lastState = -1;
 int state = -1;
